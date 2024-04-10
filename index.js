@@ -74,7 +74,7 @@ app.post('/hotels/picture', upload.single('picture'), async (req, res) => {
 app.get('/hotels', async (req, res) => {
   try {
     const hotels = await Hotel.find();
-    res.json(hotels);
+    res.json({hotels});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -83,7 +83,7 @@ app.get('/hotels', async (req, res) => {
 app.get('/tracks', async (req, res) => {
   try {
     const tracks = await Track.find();
-    res.json(tracks);
+    res.json({tracks});
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
