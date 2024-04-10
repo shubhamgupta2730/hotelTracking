@@ -42,8 +42,21 @@ const hotelSchema = new mongoose.Schema({
   phone: String,
 });
 
+const trackSchema = new mongoose.Schema({
+  id: Number,
+  name: String,
+  distance_km: String,
+  duration_days: Number,
+  starting_point: String,
+  ending_point: String,
+  image: String,
+});
+
 // Create hotel model
 const Hotel = mongoose.model('Hotel', hotelSchema);
+
+//create track model:
+const Track = mongoose.model('Track', trackSchema);
 
 // Endpoint for uploading hotel picture to Cloudinary
 app.post('/hotels/picture', upload.single('picture'), async (req, res) => {
@@ -67,6 +80,15 @@ app.get('/hotels', async (req, res) => {
   }
 });
 
+app.get('/tracks', async (req, res) => {
+  try {
+    const tracks = await Track.find();
+    res.json(tracks);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 app.post('/hotels', async (req, res) => {
   const hotel = new Hotel({
     id: req.body.id,
@@ -83,6 +105,26 @@ app.post('/hotels', async (req, res) => {
   try {
     const newHotel = await hotel.save();
     res.status(201).json(newHotel);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+app.post('/tracks', async (req, res) => {
+  const track = new Track({
+    id: req.body.id,
+    name: req.body.name,
+    distance_km: req.body.distance_km,
+    duration_days: req.body.duration_days,
+    starting_point: req.body.starting_point,
+    ending_point: req.body.ending_point,
+    image: req.body.image
+
+  });
+
+  try {
+    const newTrack = await track.save();
+    res.status(201).json(newTrack);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
